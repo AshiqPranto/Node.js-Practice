@@ -13,11 +13,26 @@ connect.then((db) => {
     })
     .then((dish) => {
         console.log(dish);
-        return Dishes.find({});
+        return Dishes.findByIdAndUpdate(dish._id,{
+            $set: {description: 'updated-test'}
+        },{
+            new: true
+        })
+        .exec();
     })
-    .then((dishes) => {
-        console.log(dishes);
-        return Dishes.remove({});
+    .then((dish) => {
+        console.log(dish);
+
+        dish.comments.push({
+            rating: 5,
+            comment: 'Taste good',
+            author: 'Pranto'
+        });
+        return dish.save();
+    })
+    .then((dish) => {
+        console.log(dish);
+        return Dishes.remove();
     })
     .then(() => {
         return mongoose.connection.close();
